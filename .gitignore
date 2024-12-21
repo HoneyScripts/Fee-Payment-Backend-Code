@@ -1,0 +1,33 @@
+# Logs
+logs/
+*.log
+npm-debug.log*
+
+# Dependency directories
+node_modules/
+bower_components/
+
+# Build output
+dist/
+build/
+
+# Environment files
+.env
+.env.local
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+
+# System files
+.DS_Store
+Thumbs.db
+
+# Optional if using AWS or other cloud services
+.aws/
+.terraform/
+
+# Coverage reports
+coverage/
+*.lcov
