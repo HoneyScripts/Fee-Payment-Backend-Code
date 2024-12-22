@@ -1,47 +1,23 @@
 const express = require('express');
-const bodyParser = require('body-parser');
 const cors = require('cors');
-const db = require('./db');
-
+const connectDB=require("./dbConnection")
+const {addCourse}=require("./Controls/courseControll")
+const {registerStudent}=require("./Controls/studentControll")
+const {registerTrainer}=require("./Controls/trainerControll")
 const app = express();
-const PORT = 3001;
+const PORT = 5000;
 
 // Middleware
-app.use(bodyParser.json()); // Parse JSON request bodies
-app.use(cors());            // Enable CORS
+app.use(express.json()); 
+app.use(cors());            
 
-// Sample route
-app.get('/', (req, res) => {
-    res.send('Welcome to Express API!');
-});
-
-const pool = require('./db');
-
-app.post('/addtrainer', async (req, res) => {
-    const { name } = req.body;
-
-    if (!name) {
-        return res.status(400).json({ error: 'All fields are required' });
-    }
-
-    try {
-        const result = await pool.query(
-            'INSERT INTO trainers (name) VALUES (?)',
-            [name]
-        );
-
-        // Get the last inserted trainer using LAST_INSERT_ID()
-        const trainerId = result.insertId; // This is specific to MySQL
-        const [trainer] = await pool.query('SELECT * FROM trainers WHERE trainer_id = ?', [trainerId]);
-
-        res.status(201).json(trainer[0]); // Return the inserted trainer
-    } catch (error) {
-        console.error('Database query error:', error.message);
-        res.status(500).json({ error: 'Database error' });
-    }
-});
-
-
+connectDB()
+//studnet registration
+app.post('/add-student',registerStudent)
+//trainer registration
+app.post("/add-trainer",registerTrainer)
+//add course
+app.post("/add-course",addCourse)
 // Start the server
 app.listen(PORT, () => {
     console.log(`Server running on http://localhost:${PORT}`);
